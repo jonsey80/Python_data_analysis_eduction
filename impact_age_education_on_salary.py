@@ -65,4 +65,33 @@ age_grouping = age_different_perc.groupby(['age_group','education']).agg(
 
 age_grouping['%_above50k'] = (age_grouping['total_above_50k']/age_grouping['total_adults']) *100 
 
-print(age_grouping)
+
+
+age_grouping_avg = age_grouping.reset_index()[['age_group','education','%_above50k']]
+
+education_levels = age_grouping_avg['education'].unique()
+for education in education_levels:
+    subset = age_grouping_avg[age_grouping_avg['education'] == education]
+    print(subset)
+    plt.plot(
+        subset['age_group'],            # x-axis: percentage of total workers in each age group
+        subset['%_above50k'],        # y-axis: percentage of workers in each education level
+        marker='o',                              # Markers at each data point
+        label=education                          # Label for the legend
+    )
+
+
+# Add chart title and labels
+plt.title('Percentage of Workers by Age Group and Education Level who earn over 50K p/A')
+plt.xlabel('Age Group')
+plt.ylabel('Percentage of Workers within Age Group (%)')
+
+# Add a legend
+plt.legend(title='Education Level')
+
+# Display the chart
+plt.tight_layout()
+plt.show()
+
+##Confirms that the higher your education the better chance you have of getting over 50k p/a with the chances maxing
+## at 40-50, decreasing after this 
